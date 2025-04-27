@@ -6,7 +6,7 @@ export function init() {
 	});
 }
 
-function checktext(w: object) {
+function checktext(w: Record<string, CharInfo>) {
 	const inputElement = document.getElementById("input") as HTMLTextAreaElement;
 	const inp: string = inputElement.value;
 	// take first n characters
@@ -29,47 +29,54 @@ function clearResult() {
 }
 
 async function reportChar(
-	w: object,
+	w: Record<string, CharInfo>,
 	li: HTMLLIElement,
 	c: string,
 ): Promise<HTMLLIElement> {
 	let reportText = c;
-	const codeInfo = c.codePointAt(0)?.toString(16).padStart(4, "0")!;
-	reportText += `: U+${codeInfo}`;
+	const codePointStr: string = c
+		.codePointAt(0)
+		?.toString(16)
+		.toUpperCase()
+		.padStart(4, "0")!;
+	console.log(`codepoint: ${codePointStr}`);
+	reportText += `: <code>U+${codePointStr}</code> `;
 	// 最後の2文字を除いた残りでファイルに分けてる
-	const searchHeader = codeInfo.slice(0, codeInfo.length - 2);
-	await loadDataFor(w, searchHeader);
-	li.innerText = reportText;
+	if (w[codePointStr] === undefined) {
+		const searchHeader = codePointStr.slice(0, codePointStr.length - 2);
+		await loadDataFor(w, searchHeader);
+	}
+	reportText += w[codePointStr].charName;
+	li.innerHTML = reportText;
 	return li;
 }
 
-async function loadDataFor(w: any, searchHeader: string): Promise<void> {
-	if ((w as any)[searchHeader] === undefined) {
-		// このファイル読むの初めてなので読み出す
-		const response = await fetch(
-			`/static/unicode-org/Public/UCD/latest/ucd/UnicodeData/${searchHeader}.txt`,
-		);
-		if (!response.ok) {
-			console.log(`ERROR response in looking for ${searchHeader}: ${response}`);
-		} else {
-			const t = await response.text();
-			const characters: Array<CharInfo> = [];
-			for (const line of t.split(/\r?\n/)) {
-				if (line.length > 0) {
-					characters.push(CharInfo.fromLine(line));
-				}
-			}
-			w[searchHeader] = characters;
-		}
+async function loadDataFor(
+	w: Record<string, CharInfo>,
+	searchHeader: string,
+): Promise<void> {
+	// このファイル読むの初めてなので読み出す
+	const response = await fetch(
+		`/static/unicode-org/Public/UCD/latest/ucd/UnicodeData/${searchHeader}.txt`,
+	);
+	if (!response.ok) {
+		console.log(`ERROR response in looking for ${searchHeader}: ${response}`);
 	} else {
-		console.log(`data for ${searchHeader} already read`);
+		const t = await response.text();
+		const characters: Array<CharInfo> = [];
+		for (const line of t.split(/\r?\n/)) {
+			if (line.length > 0) {
+				const ci = CharInfo.fromLine(line);
+				w[ci.codepoint] = ci;
+			}
+		}
 	}
 }
 
 class CharInfo {
 	c: string;
 	codepoint: string;
-	name: string;
+	charName: string;
 	generalCategory: string;
 	canonicalCombiningClass: string;
 	bidiClass: string;
@@ -103,8 +110,8 @@ class CharInfo {
 		simpleTitlecaseMapping: string,
 	) {
 		this.c = c;
-		this.codepoint = codepoint;
-		this.name = name;
+		this.codepoint = codepoint.toUpperCase();
+		this.charName = name;
 		this.generalCategory = generalCategory;
 		this.canonicalCombiningClass = canonicalCombiningClass;
 		this.bidiClass = bidiClass;
