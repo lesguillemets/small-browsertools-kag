@@ -1,0 +1,2 @@
+3134A;<CJK Ideograph Extension G, Last>;Lo;0;L;;;;;N;;;;;
+31350;<CJK Ideograph Extension H, First>;Lo;0;L;;;;;N;;;;;

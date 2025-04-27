@@ -1,0 +1,2 @@
+2EBE0;<CJK Ideograph Extension F, Last>;Lo;0;L;;;;;N;;;;;
+2EBF0;<CJK Ideograph Extension I, First>;Lo;0;L;;;;;N;;;;;

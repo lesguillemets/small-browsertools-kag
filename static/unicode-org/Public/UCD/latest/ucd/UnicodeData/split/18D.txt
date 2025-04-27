@@ -1,0 +1,2 @@
+18D00;<Tangut Ideograph Supplement, First>;Lo;0;L;;;;;N;;;;;
+18D08;<Tangut Ideograph Supplement, Last>;Lo;0;L;;;;;N;;;;;

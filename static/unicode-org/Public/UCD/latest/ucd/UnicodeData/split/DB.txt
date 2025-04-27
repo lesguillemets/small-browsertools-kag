@@ -1,0 +1,3 @@
+DB7F;<Non Private Use High Surrogate, Last>;Cs;0;L;;;;;N;;;;;
+DB80;<Private Use High Surrogate, First>;Cs;0;L;;;;;N;;;;;
+DBFF;<Private Use High Surrogate, Last>;Cs;0;L;;;;;N;;;;;
