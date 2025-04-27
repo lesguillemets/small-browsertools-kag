@@ -8,7 +8,7 @@ export function init() {
 
 function checktext(w: Record<string, CharInfo>) {
 	const inputElement = document.getElementById("input") as HTMLTextAreaElement;
-	const inp: string = inputElement.value;
+	const inp: Array<string> = Array.from(inputElement.value);
 	// take first n characters
 	const trunc = document.getElementById("trunc") as HTMLInputElement;
 	const take_n: number = Math.min(inp.length, Number.parseInt(trunc.value));
