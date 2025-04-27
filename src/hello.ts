@@ -1,4 +1,4 @@
-function init() {
+export function init() {
 	console.log("HI!");
 }
 
