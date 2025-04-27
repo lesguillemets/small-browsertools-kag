@@ -33,14 +33,14 @@ async function reportChar(
 	li: HTMLLIElement,
 	c: string,
 ): Promise<HTMLLIElement> {
-	let reportText = c;
+	let reportText = `<pre class="single-char">${c}</pre>`;
 	const codePointStr: string = c
 		.codePointAt(0)
 		?.toString(16)
 		.toUpperCase()
 		.padStart(4, "0")!;
 	console.log(`codepoint: ${codePointStr}`);
-	reportText += `: <code>U+${codePointStr}</code> `;
+	reportText += ` : <code>U+${codePointStr}</code> `;
 	// 最後の2文字を除いた残りでファイルに分けてる
 	if (w[codePointStr] === undefined) {
 		const searchHeader = codePointStr.slice(0, codePointStr.length - 2);
